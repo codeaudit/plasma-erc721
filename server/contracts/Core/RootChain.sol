@@ -237,7 +237,12 @@ contract RootChain is ERC721Receiver, ERC20Receiver {
     ///            related to `slot`. If the coin is ETH or ERC20 the uid is 0
     /// @param denomination The quantity of a particular coin being deposited
     /// @param mode The type of coin that is being deposited (ETH/ERC721/ERC20)
-    function deposit(address from, uint256 uid, uint256 denomination, Mode mode)
+    function deposit(
+        address from, 
+        uint256 uid, 
+        uint256 denomination, 
+        Mode mode
+    )
         private
     {
         currentBlock = currentBlock.add(1);
@@ -245,7 +250,7 @@ contract RootChain is ERC721Receiver, ERC20Receiver {
 
         // Update state. Leave `exit` empty
         Coin storage coin = coins[slot];
-        coin.uid =  uid;
+        coin.uid = uid;
         coin.contractAddress = msg.sender;
         coin.denomination = denomination;
         coin.depositBlock = currentBlock;
@@ -417,7 +422,7 @@ contract RootChain is ERC721Receiver, ERC20Receiver {
         } else if (c.mode == Mode.ERC721) {
             ERC721(c.contractAddress).safeTransferFrom(address(this), msg.sender, uid);
         } else {
-            revert('Invalid coin mode');
+            revert("Invalid coin mode");
         }
 
         emit Withdrew(msg.sender, c.mode, c.contractAddress, uid, denomination);
